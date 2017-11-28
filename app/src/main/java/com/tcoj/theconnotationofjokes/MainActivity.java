@@ -3,6 +3,7 @@ package com.tcoj.theconnotationofjokes;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -11,6 +12,8 @@ import com.tcoj.baselibrary.dialog.AlertDialog;
 import com.tcoj.baselibrary.fixbug.FixDexManager;
 import com.tcoj.baselibrary.ioc.ViewByIdUtil;
 import com.tcoj.framelibrary.BaseSkinActivity;
+import com.tcoj.framelibrary.DefaultNavigationBar;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
@@ -28,7 +31,18 @@ public class MainActivity extends BaseSkinActivity implements View.OnClickListen
 
     @Override
     protected void initTitle() {
-
+        DefaultNavigationBar defaultNavigationBar = new DefaultNavigationBar
+                .DefaultBuilder(this)
+                .setTitle("小损儿")
+                .setRightText("更多损儿")
+                .setRightIcon(R.mipmap.ic_launcher)
+                .setRightClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MainActivity.this,"哈哈",Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .builder();
     }
 
     @Override
