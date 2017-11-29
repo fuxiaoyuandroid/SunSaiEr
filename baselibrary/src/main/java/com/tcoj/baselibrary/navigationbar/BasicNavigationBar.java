@@ -3,12 +3,12 @@ package com.tcoj.baselibrary.navigationbar;
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.tcoj.baselibrary.R;
 
 /**
  * Created by Administrator on 2017/11/28 0028.
@@ -37,6 +37,12 @@ public abstract class BasicNavigationBar<P extends BasicNavigationBar.Builder.Ba
         }
     }
 
+    public void setImageResource(int viewId, int resourceId){
+        ImageView imageView = findViewById(viewId);
+        if (imageView != null) {
+            imageView.setImageResource(resourceId);
+        }
+    }
 
     public void setOnClickListener(int viewId, View.OnClickListener listener){
         findViewById(viewId).setOnClickListener(listener);
@@ -56,16 +62,17 @@ public abstract class BasicNavigationBar<P extends BasicNavigationBar.Builder.Ba
         //创建
         if (mParams.mParent == null){
             //获取Activity的根布局
-            ViewGroup activityRoot = ((Activity)(mParams.mContext)).findViewById(android.R.id.content);
+           //ViewGroup activityRoot =((Activity)(mParams.mContext)).findViewById(android.R.id.content);
+            ViewGroup activityRoot = (ViewGroup) ((Activity)(mParams.mContext)).getWindow().getDecorView();
             mParams.mParent = (ViewGroup) activityRoot.getChildAt(0);
+            Log.d("ss", "createAndBindView: "+mParams.mParent);
         }
 
         //处理
         if (mParams.mParent == null){
+            Log.d("ss", "createAndBindView: return");
             return;
         }
-
-
 
         mNavigationView = LayoutInflater.from(mParams.mContext).inflate(bindLayoutId(),mParams.mParent,false);
 

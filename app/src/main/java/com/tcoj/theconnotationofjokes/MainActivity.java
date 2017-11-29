@@ -31,11 +31,11 @@ public class MainActivity extends BaseSkinActivity implements View.OnClickListen
 
     @Override
     protected void initTitle() {
+        //,(ViewGroup) findViewById(R.id.activity_main)
         DefaultNavigationBar defaultNavigationBar = new DefaultNavigationBar
                 .DefaultBuilder(this)
-                .setTitle("小损儿")
-                .setRightText("更多损儿")
-                .setRightIcon(R.mipmap.ic_launcher)
+                .setTitle("损色儿")
+                .setRightText("更多")
                 .setRightClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

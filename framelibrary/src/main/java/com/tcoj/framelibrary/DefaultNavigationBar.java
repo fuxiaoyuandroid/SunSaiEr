@@ -28,15 +28,13 @@ public class DefaultNavigationBar extends BasicNavigationBar<DefaultNavigationBa
         //设置文本
         setText(R.id.title_tv,getParams().mTitle);
         setText(R.id.right_tv,getParams().mRightText);
-
+      /*  setImageResource(R.id.right_iv, getParams().mResId);*/
         //设置点击事件
         setOnClickListener(R.id.right_tv,getParams().mRightClickListener);
         //左边的点击事件都是默认的
         setOnClickListener(R.id.left_tv,getParams().mLeftClickListener);
 
     }
-
-
 
     public static class DefaultBuilder extends BasicNavigationBar.Builder{
         DefaultNavigationParams P;
@@ -60,6 +58,7 @@ public class DefaultNavigationBar extends BasicNavigationBar<DefaultNavigationBa
             P.mTitle = title;
             return this;
         }
+
 
         public DefaultBuilder setRightText(String rightText){
             P.mRightText = rightText;
