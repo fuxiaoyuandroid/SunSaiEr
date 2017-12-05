@@ -1,5 +1,6 @@
 package com.tcoj.theconnotationofjokes;
 
+import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
@@ -7,21 +8,29 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 import com.tcoj.baselibrary.ExceptionCrashHandler;
 import com.tcoj.baselibrary.dialog.AlertDialog;
 import com.tcoj.baselibrary.fixbug.FixDexManager;
+import com.tcoj.baselibrary.http.EngineCallBack;
+import com.tcoj.baselibrary.http.HttpUtils;
 import com.tcoj.baselibrary.ioc.ViewByIdUtil;
 import com.tcoj.framelibrary.BaseSkinActivity;
 import com.tcoj.framelibrary.DefaultNavigationBar;
+import com.tcoj.framelibrary.HttpCallBack;
+import com.tcoj.theconnotationofjokes.model.HeadListResult;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.Map;
 
 /**
  * 主页面
  */
 public class MainActivity extends BaseSkinActivity implements View.OnClickListener{
+    private static final String TAG = "MainActivity";
 
     private ImageView ss_iv;
     @Override
@@ -57,6 +66,31 @@ public class MainActivity extends BaseSkinActivity implements View.OnClickListen
         //fixBugByAli();
 
         //fixBugByDex();
+        //http://api.jisuapi.com/news/get?channel=头条&start=0&num=10&appkey=yourappkey  appkey: 76253a4c8656d647
+       HttpUtils.with(this).url("http://api.jisuapi.com/news/get?")
+               .addParam("channel","头条")
+               .addParam("start","0")
+               .addParam("num",10)
+               .get()
+               .execute(new HttpCallBack<HeadListResult>() {
+                   @Override
+                   public void onPreExecute() {
+                       //根据需求重写此方法
+                   }
+
+                   @Override
+                   public void onSuccess(HeadListResult headListResult) {
+
+                       Log.d(TAG, "onSuccess: "+headListResult.getResult().getList().get(0).getTitle());
+                   }
+
+                   @Override
+                   public void onError(Exception e) {
+
+                   }
+
+
+               });
     }
 
     /**
