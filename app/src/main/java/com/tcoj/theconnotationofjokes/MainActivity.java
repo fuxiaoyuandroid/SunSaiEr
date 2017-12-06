@@ -19,11 +19,17 @@ import com.tcoj.baselibrary.ioc.ViewByIdUtil;
 import com.tcoj.framelibrary.BaseSkinActivity;
 import com.tcoj.framelibrary.DefaultNavigationBar;
 import com.tcoj.framelibrary.HttpCallBack;
+import com.tcoj.framelibrary.db.DaoSupport;
+import com.tcoj.framelibrary.db.DaoSupportFactory;
+import com.tcoj.framelibrary.db.IDaoSupport;
 import com.tcoj.theconnotationofjokes.model.HeadListResult;
+import com.tcoj.theconnotationofjokes.model.Person;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,12 +68,19 @@ public class MainActivity extends BaseSkinActivity implements View.OnClickListen
 
     @Override
     protected void initData() {
+        /*IDaoSupport<Person> daoSupport = DaoSupportFactory.getFactory().getDao(Person.class);
+
+        List<Person> list = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            list.add(new Person("郑"+i+"冬",11));
+        }
+        daoSupport.insert(list);*/
 
         //fixBugByAli();
 
         //fixBugByDex();
         //http://api.jisuapi.com/news/get?channel=头条&start=0&num=10&appkey=yourappkey  appkey: 76253a4c8656d647
-       HttpUtils.with(this).url("http://api.jisuapi.com/news/get?")
+       /*HttpUtils.with(this).url("http://api.jisuapi.com/news/get?")
                .addParam("channel","头条")
                .addParam("start","0")
                .addParam("num",10)
@@ -90,7 +103,10 @@ public class MainActivity extends BaseSkinActivity implements View.OnClickListen
                    }
 
 
-               });
+               });*/
+       /* IDaoSupport<Person> daoSupport = DaoSupportFactory.getFactory().getDao(Person.class);
+        List<Person> person = daoSupport.querySupport().selection("name = ?").selectionArgs("罗1人").query();
+        Toast.makeText(this,person.size()+"条数据",Toast.LENGTH_SHORT).show();*/
     }
 
     /**
