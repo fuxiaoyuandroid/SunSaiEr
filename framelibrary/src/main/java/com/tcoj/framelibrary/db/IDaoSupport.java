@@ -24,7 +24,7 @@ public interface IDaoSupport<T> {
     /*List<T> query();*/
     QuerySupport<T> querySupport();
     //删除
-    int delete(String whereClause,String[] whereArgs);
+    int delete(String whereClause,String...whereArgs);
 
     //修改
     int update(T obj,String whereClause,String...whereArgs);

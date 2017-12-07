@@ -1,7 +1,15 @@
-package com.tcoj.baselibrary.http;
+package com.tcoj.framelibrary.http;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
+
+import com.tcoj.baselibrary.http.EngineCallBack;
+import com.tcoj.baselibrary.http.HttpEngine;
+import com.tcoj.baselibrary.http.HttpUtils;
+import com.tcoj.baselibrary.utils.MD5Util;
+import com.tcoj.framelibrary.db.DaoSupportFactory;
+import com.tcoj.framelibrary.db.IDaoSupport;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +21,6 @@ import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -30,13 +37,24 @@ public class OkHttpEngine implements HttpEngine{
 
     private static OkHttpClient mOkHttpClient =  new OkHttpClient();
 
+
     @Override
-    public void get(Context context, String url, HashMap<String, Object> params, final EngineCallBack callBack) {
-        url = HttpUtils.jointParams(url,params);
+    public void get(final boolean cache, Context context, String url, HashMap<String, Object> params, final EngineCallBack callBack) {
+        final String finalUrl = HttpUtils.jointParams(url,params);
+        //MD5加密的原因是因为数据库中存储的数据中有http:识别不了
+        Log.d(TAG, "get: "+finalUrl+"md5:"+MD5Util.MD5(finalUrl));
+        //判断是否需要缓存，如果需要，从本地数据库拿数据
+        if (cache){
+                String result = CacheDataUtil.getCacheJsonData(finalUrl);
+                if (!TextUtils.isEmpty(result)){
+                    //有缓存,执行
+                    Log.d(TAG, "get: 缓存");
+                    callBack.onSuccess(result);
+                }
 
-        Log.d(TAG, "get: "+url);
+        }
 
-        Request.Builder requestBuilder = new Request.Builder().url(url).tag(context);
+        Request.Builder requestBuilder = new Request.Builder().url(finalUrl).tag(context);
 
         requestBuilder.method("GET",null);
 
@@ -52,13 +70,32 @@ public class OkHttpEngine implements HttpEngine{
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
                 Log.d(TAG, "resultGet: "+result);
+                //获取到数据之后，缓存
+                if (cache) {
+                        String compareResult = CacheDataUtil.getCacheJsonData(finalUrl);
+                        Log.d(TAG, "compareResult: " + compareResult);
+                        if (!TextUtils.isEmpty(compareResult)) {
+                            //比对上一次内容  一样的内容 不需要执行刷新界面
+                            if (result.equals(compareResult)) {
+                                Log.d(TAG, "onResponse: 一致");
+                                return;
+                            }
+                        }
+                }
+
                 callBack.onSuccess(result);
+                //缓存数据
+                if (cache){
+                    long number = CacheDataUtil.cacheData(finalUrl,result);
+                    Log.d(TAG, "onResponse: "+number);
+                }
+
             }
         });
     }
 
     @Override
-    public void post(Context context, String url, HashMap<String, Object> params, final EngineCallBack callBack) {
+    public void post(boolean cache,Context context, String url, HashMap<String, Object> params, final EngineCallBack callBack) {
         final String jointUrl = HttpUtils.jointParams(url,params);
 
         Log.d(TAG, "post: "+jointUrl);

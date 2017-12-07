@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public interface HttpEngine {
 
-    void get(Context context, String url, HashMap<String,Object> params, EngineCallBack callBack);
+    void get(boolean cache,Context context, String url, HashMap<String,Object> params, EngineCallBack callBack);
 
-    void post(Context context, String url,HashMap<String,Object> params,EngineCallBack callBack);
+    void post(boolean cache,Context context, String url,HashMap<String,Object> params,EngineCallBack callBack);
 }

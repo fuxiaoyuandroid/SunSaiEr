@@ -22,7 +22,9 @@ public class HttpUtils{
 
     private String mUrl;
 
-    private static HttpEngine mHttpEngine = new OkHttpEngine();
+    private boolean mCache = false;
+
+    private static HttpEngine mHttpEngine = null;
 
     private HashMap<String,Object> mParams;
 
@@ -54,6 +56,11 @@ public class HttpUtils{
     //post提交
     public HttpUtils post(){
         mType = POST_TYPE;
+        return this;
+    }
+    //url
+    public HttpUtils isCache(boolean cache){
+        this.mCache = cache;
         return this;
     }
     //url
@@ -94,12 +101,12 @@ public class HttpUtils{
 
     //调用引擎
     private void get(String url, HashMap<String, Object> params, EngineCallBack callBack) {
-        mHttpEngine.get(mContext,url,params,callBack);
+        mHttpEngine.get(mCache,mContext,url,params,callBack);
     }
 
 
     private void post(String url, HashMap<String, Object> params, EngineCallBack callBack) {
-        mHttpEngine.post(mContext,url,params,callBack);
+        mHttpEngine.post(mCache,mContext,url,params,callBack);
     }
 
     /**

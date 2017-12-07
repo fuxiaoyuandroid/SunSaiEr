@@ -80,8 +80,9 @@ public class MainActivity extends BaseSkinActivity implements View.OnClickListen
 
         //fixBugByDex();
         //http://api.jisuapi.com/news/get?channel=头条&start=0&num=10&appkey=yourappkey  appkey: 76253a4c8656d647
-       /*HttpUtils.with(this).url("http://api.jisuapi.com/news/get?")
-               .addParam("channel","头条")
+       HttpUtils.with(this).url("http://api.jisuapi.com/news/get?")
+               .isCache(true)
+               .addParam("channel","娱乐")
                .addParam("start","0")
                .addParam("num",10)
                .get()
@@ -103,7 +104,7 @@ public class MainActivity extends BaseSkinActivity implements View.OnClickListen
                    }
 
 
-               });*/
+               });
        /* IDaoSupport<Person> daoSupport = DaoSupportFactory.getFactory().getDao(Person.class);
         List<Person> person = daoSupport.querySupport().selection("name = ?").selectionArgs("罗1人").query();
         Toast.makeText(this,person.size()+"条数据",Toast.LENGTH_SHORT).show();*/
