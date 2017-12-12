@@ -136,12 +136,12 @@ public class ViewByIdUtil {
                 mMethod.invoke(mObject,v);
             } catch (Exception e) {
                 e.printStackTrace();
-                try {
+               /* try {
                     //方法无参数
                     mMethod.invoke(mObject,null);
                 } catch (Exception e1) {
                     e1.printStackTrace();
-                }
+                }*/
 
             }
         }

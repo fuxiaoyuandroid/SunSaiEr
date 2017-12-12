@@ -4,18 +4,34 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.tcoj.theconnotationofjokes.MainActivity">
 
     <TextView
         android:id="@+id/ss_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:textSize="20sp"
-        android:text="损色儿" />
+        android:text="损色儿,损色儿,损色儿" />
     <ImageView
         android:id="@+id/ss_iv"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_below="@id/ss_tv"
         android:src="@mipmap/sunsai"/>
+
+    <Button
+        android:id="@+id/ss_change_skin_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="#ff0000"
+        android:background="@android:color/transparent"
+        android:text="损色儿换肤"/>
+    <ImageView
+        android:id="@+id/ss_change_skin_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/skin"/>
 </LinearLayout>

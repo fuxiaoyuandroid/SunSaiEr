@@ -1,10 +1,14 @@
 package com.tcoj.theconnotationofjokes;
 
 import android.content.Context;
+import android.content.res.AssetManager;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -15,7 +19,9 @@ import com.tcoj.baselibrary.dialog.AlertDialog;
 import com.tcoj.baselibrary.fixbug.FixDexManager;
 import com.tcoj.baselibrary.http.EngineCallBack;
 import com.tcoj.baselibrary.http.HttpUtils;
+import com.tcoj.baselibrary.ioc.ViewById;
 import com.tcoj.baselibrary.ioc.ViewByIdUtil;
+import com.tcoj.baselibrary.ioc.ViewOnClick;
 import com.tcoj.framelibrary.BaseSkinActivity;
 import com.tcoj.framelibrary.DefaultNavigationBar;
 import com.tcoj.framelibrary.HttpCallBack;
@@ -28,6 +34,7 @@ import com.tcoj.theconnotationofjokes.model.Person;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,9 +46,15 @@ public class MainActivity extends BaseSkinActivity implements View.OnClickListen
     private static final String TAG = "MainActivity";
 
     private ImageView ss_iv;
+    @ViewById(R.id.ss_change_skin_iv)
+    private ImageView ss_change_skin_iv;
+
+    @ViewById(R.id.ss_change_skin_btn)
+    private Button ss_change_skin_btn;
     @Override
     protected void setSelfContentView() {
         setContentView(R.layout.activity_main);
+        ViewByIdUtil.inject(this);
     }
 
     @Override
@@ -80,7 +93,7 @@ public class MainActivity extends BaseSkinActivity implements View.OnClickListen
 
         //fixBugByDex();
         //http://api.jisuapi.com/news/get?channel=头条&start=0&num=10&appkey=yourappkey  appkey: 76253a4c8656d647
-       HttpUtils.with(this).url("http://api.jisuapi.com/news/get?")
+       /*HttpUtils.with(this).url("http://api.jisuapi.com/news/get?")
                .isCache(true)
                .addParam("channel","娱乐")
                .addParam("start","0")
@@ -104,7 +117,7 @@ public class MainActivity extends BaseSkinActivity implements View.OnClickListen
                    }
 
 
-               });
+               });*/
        /* IDaoSupport<Person> daoSupport = DaoSupportFactory.getFactory().getDao(Person.class);
         List<Person> person = daoSupport.querySupport().selection("name = ?").selectionArgs("罗1人").query();
         Toast.makeText(this,person.size()+"条数据",Toast.LENGTH_SHORT).show();*/
@@ -164,7 +177,33 @@ public class MainActivity extends BaseSkinActivity implements View.OnClickListen
             }
         }
     }
+    @ViewOnClick(R.id.ss_change_skin_btn)
+    public void onBtnClick(View view){
+        Toast.makeText(this,"小损换肤啦",Toast.LENGTH_SHORT).show();
+        //获取参数
+        Resources sResources = getResources();
 
+        try {
+            //创建AssetManager
+            AssetManager assetManager = AssetManager.class.newInstance();
+            //添加下载到本地的皮肤资源
+            Method method = AssetManager.class.getDeclaredMethod("addAssetPath",String.class);
+
+            method.invoke(assetManager,Environment.getExternalStorageDirectory().getAbsolutePath()+File.separator+"er.skin");
+            //创建Resources
+            Resources resources = new Resources(assetManager,sResources.getDisplayMetrics(),sResources.getConfiguration());
+            //获取资源
+            int id = resources.getIdentifier("skin","drawable","com.ss.changeskin");
+
+            Drawable drawable = resources.getDrawable(id);
+
+            ss_change_skin_iv.setImageDrawable(drawable);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
 
     @Override
     public void onClick(View v) {
