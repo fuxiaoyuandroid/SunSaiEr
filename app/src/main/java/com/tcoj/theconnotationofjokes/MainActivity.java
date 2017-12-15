@@ -1,11 +1,13 @@
 package com.tcoj.theconnotationofjokes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -28,6 +30,7 @@ import com.tcoj.framelibrary.HttpCallBack;
 import com.tcoj.framelibrary.db.DaoSupport;
 import com.tcoj.framelibrary.db.DaoSupportFactory;
 import com.tcoj.framelibrary.db.IDaoSupport;
+import com.tcoj.framelibrary.skin.SkinManager;
 import com.tcoj.theconnotationofjokes.model.HeadListResult;
 import com.tcoj.theconnotationofjokes.model.Person;
 
@@ -45,16 +48,16 @@ import java.util.Map;
 public class MainActivity extends BaseSkinActivity implements View.OnClickListener{
     private static final String TAG = "MainActivity";
 
-    private ImageView ss_iv;
-    @ViewById(R.id.ss_change_skin_iv)
+    /*private ImageView ss_iv;*/
+
     private ImageView ss_change_skin_iv;
 
-    @ViewById(R.id.ss_change_skin_btn)
-    private Button ss_change_skin_btn;
+    private Button jump_btn,ss_change_skin_btn,give_btn;
     @Override
     protected void setSelfContentView() {
         setContentView(R.layout.activity_main);
-        ViewByIdUtil.inject(this);
+        //ViewByIdUtil.inject(this);
+        //LayoutInflater.from(this).inflate(R.layout.activity_main,null,false);
     }
 
     @Override
@@ -75,8 +78,55 @@ public class MainActivity extends BaseSkinActivity implements View.OnClickListen
 
     @Override
     protected void initView() {
-        ss_iv = (ImageView) findViewById(R.id.ss_iv);
-        ss_iv.setOnClickListener(this);
+       /* ss_iv = (ImageView) findViewById(R.id.ss_iv);*/
+        jump_btn = (Button) findViewById(R.id.jump_btn);
+        jump_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(MainActivity.class);
+            }
+        });
+        give_btn = (Button) findViewById(R.id.give_btn);
+        give_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int result = SkinManager.getInstance().restoreDefaultSkin();
+            }
+        });
+        ss_change_skin_iv = (ImageView) findViewById(R.id.ss_change_skin_iv);
+       /* ss_iv.setOnClickListener(this);*/
+        ss_change_skin_btn = (Button) findViewById(R.id.ss_change_skin_btn);
+        ss_change_skin_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this,"小损换肤啦",Toast.LENGTH_SHORT).show();
+                String path = Environment.getExternalStorageDirectory().getAbsolutePath()+File.separator+"newSkin.skin";
+                int result = SkinManager.getInstance().loadSkin(path);
+               /* //获取参数
+                Resources sResources = getResources();
+
+                try {
+                    //创建AssetManager
+                    AssetManager assetManager = AssetManager.class.newInstance();
+                    //添加下载到本地的皮肤资源
+                    Method method = AssetManager.class.getDeclaredMethod("addAssetPath",String.class);
+
+                    method.invoke(assetManager,Environment.getExternalStorageDirectory().getAbsolutePath()+File.separator+"er.skin");
+                    //创建Resources
+                    Resources resources = new Resources(assetManager,sResources.getDisplayMetrics(),sResources.getConfiguration());
+                    //获取资源
+                    int id = resources.getIdentifier("skin","drawable","com.ss.changeskin");
+
+                    Drawable drawable = resources.getDrawable(id);
+
+                    ss_change_skin_iv.setImageDrawable(drawable);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+*/
+
+            }
+        });
     }
 
     @Override
@@ -176,33 +226,6 @@ public class MainActivity extends BaseSkinActivity implements View.OnClickListen
                 Toast.makeText(MainActivity.this,"修复失败哎",Toast.LENGTH_SHORT).show();
             }
         }
-    }
-    @ViewOnClick(R.id.ss_change_skin_btn)
-    public void onBtnClick(View view){
-        Toast.makeText(this,"小损换肤啦",Toast.LENGTH_SHORT).show();
-        //获取参数
-        Resources sResources = getResources();
-
-        try {
-            //创建AssetManager
-            AssetManager assetManager = AssetManager.class.newInstance();
-            //添加下载到本地的皮肤资源
-            Method method = AssetManager.class.getDeclaredMethod("addAssetPath",String.class);
-
-            method.invoke(assetManager,Environment.getExternalStorageDirectory().getAbsolutePath()+File.separator+"er.skin");
-            //创建Resources
-            Resources resources = new Resources(assetManager,sResources.getDisplayMetrics(),sResources.getConfiguration());
-            //获取资源
-            int id = resources.getIdentifier("skin","drawable","com.ss.changeskin");
-
-            Drawable drawable = resources.getDrawable(id);
-
-            ss_change_skin_iv.setImageDrawable(drawable);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
     }
 
     @Override

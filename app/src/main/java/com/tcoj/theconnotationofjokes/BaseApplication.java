@@ -7,6 +7,7 @@ import com.tcoj.baselibrary.ExceptionCrashHandler;
 import com.tcoj.baselibrary.fixbug.FixDexManager;
 import com.tcoj.baselibrary.http.HttpUtils;
 import com.tcoj.framelibrary.http.OkHttpEngine;
+import com.tcoj.framelibrary.skin.SkinManager;
 
 /**
  * Created by Administrator on 2017/11/22 0022.
@@ -19,6 +20,7 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         HttpUtils.init(new OkHttpEngine());
+        SkinManager.getInstance().init(this);
         //设置全局异常捕捉类
         /*ExceptionCrashHandler.getInstance().init(this);
         try {
